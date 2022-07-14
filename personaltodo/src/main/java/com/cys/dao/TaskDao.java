@@ -6,9 +6,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cys.mapper.TaskMapper;
+import com.cys.mapper.UserMapper;
 import com.cys.model.Task;
+import com.cys.model.User;
 
 @Repository
 public class TaskDao {
@@ -55,10 +58,18 @@ public class TaskDao {
 		return tasks;
 	}
 
-	public List<Task> listTaskByStatus() {
-		String byStatus = "select * from tasks_todo where status='pending";
-		List<Task> taskByStatus = jdbcTemplate.query(byStatus, new TaskMapper());
+	@SuppressWarnings("rawtypes")
+	public List listTaskByStatus(Task task) {
+		String byStatus = "select * from tasks_todo where status= ?";
+		Object[] params = { task.getStatus() };
+		List<Task> taskByStatus = (List<Task>) jdbcTemplate.queryForObject(byStatus, new TaskMapper(), params);
 		return taskByStatus;
+	}
+
+	public List<Task> taskForUser() {
+		String query = "select * from tasks_todo where assigned_to=?";
+		List<Task> taskListForUser = jdbcTemplate.query(query, new TaskMapper());
+		return taskListForUser;
 	}
 
 }
