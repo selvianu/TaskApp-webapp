@@ -96,6 +96,13 @@ public class TaskController {
 		List<Task> listTaskByStatus = taskDao.listTaskByStatus();
 		model.addAttribute("BYSTATUS", listTaskByStatus);
 		return "listoftaskbystatus.jsp";
+	}
+
+	@GetMapping("taskforuser")
+	public String taskListForUser(Model model) {
+		List<Task> listTaskForUser = taskDao.taskForUser();
+		model.addAttribute("BYSTATUS", listTaskForUser);
+		return "tasklistuser.jsp";
 
 	}
 }
